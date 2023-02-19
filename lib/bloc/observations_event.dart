@@ -7,4 +7,6 @@ abstract class ObservationsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ObservatioinSubscriptionEvent extends ObservationsEvent {}
+class ObservationsSubcriptionEvent extends ObservationsEvent {}
+
+class ObservationFilterEvent extends ObservationsEvent {}

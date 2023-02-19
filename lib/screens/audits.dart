@@ -1,41 +1,25 @@
-import 'package:admin/models/observation.dart';
-import 'package:admin/models/observation_filter.dart';
-import 'package:admin/models/observation_sort.dart';
+import 'package:admin/models/audit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:strings/strings.dart';
 
-import '../bloc/observations_bloc.dart';
+import '../bloc/audits_bloc.dart';
 
-class ObservationScreen extends StatefulWidget {
-  const ObservationScreen({super.key});
+class AuditsScreen extends StatefulWidget {
+  const AuditsScreen({super.key});
 
   @override
-  State<ObservationScreen> createState() => _ObservationScreenState();
+  State<AuditsScreen> createState() => _AuditsScreenState();
 }
 
-class _ObservationScreenState extends State<ObservationScreen> {
-  List<ObservationSortItem> sortItems = [];
-  List<ObservationFilterItem> filterItems = [];
+class _AuditsScreenState extends State<AuditsScreen> {
   List<bool> selected = [];
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      selected = List.generate(
-        context.read<ObservationsBloc>().state.observations.length,
-        (index) => false,
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ObservationsBloc, ObservationsState>(
+    return BlocConsumer<AuditsBloc, AuditsState>(
       listener: (context, state) {
         selected = List.generate(
-          state.observations.length,
+          state.audits.length,
           (index) => false,
         );
       },
@@ -90,56 +74,17 @@ class _ObservationScreenState extends State<ObservationScreen> {
                     Stack(
                       children: [
                         SortButton(
-                          sortItems: sortItems,
+                          // sortItems: sortItems,
                           onClick: () {},
                         ),
-                        // Positioned(
-                        //   child: Container(
-                        //     decoration: BoxDecoration(
-                        //       border: Border.all(
-                        //         color: Colors.black,
-                        //         width: 2,
-                        //       ),
-                        //       borderRadius: BorderRadius.circular(8),
-                        //     ),
-                        //     child: ListView.builder(
-                        //       itemCount: sortItems.length + 1,
-                        //       itemBuilder: (context, index) {
-                        //         if (index == sortItems.length) {
-                        //           return ElevatedButton(
-                        //             child: Text('+ Add Sort'),
-                        //             onPressed: () {},
-                        //           );
-                        //         }
-                        //         return SizedBox(
-                        //           height: 100,
-
-                        //           child: Row(
-                        //             children: [
-                        //               IconButton(
-                        //                 onPressed: () {},
-                        //                 icon: Row(
-                        //                   children: const [
-                        //                     Icon(Icons.more_vert),
-                        //                     Icon(Icons.more_vert),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //               DropdownButton(
-                        //                   items: [], onChanged: ((value) {}))
-                        //             ],
-                        //           ),
-                        //         );
-                        //       },
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                     const SizedBox(
                       width: 10,
                     ),
-                    FilterButton(filterItems: filterItems),
+                    FilterButton(
+                        // filterItems: filterItems,
+                        ),
                     const SizedBox(
                       width: 10,
                     ),
@@ -159,7 +104,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
             const SizedBox(
               height: 23,
             ),
-            state.observations.isNotEmpty
+            state.audits.isNotEmpty
                 ? SizedBox(
                     width: double.infinity,
                     child: DataTable(
@@ -172,7 +117,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                       ),
                       showCheckboxColumn: true,
                       dividerThickness: 2,
-                      columns: state.observations[0]
+                      columns: state.audits[0]
                           .toMap()
                           .keys
                           .map(
@@ -190,7 +135,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
                           )
                           .toList(),
                       rows: List.generate(
-                        state.observations.length,
+                        state.audits.length,
                         (index) => DataRow(
                           selected: selected[index],
                           onSelectChanged: (bool? value) {
@@ -198,26 +143,33 @@ class _ObservationScreenState extends State<ObservationScreen> {
                               selected[index] = value!;
                             });
                           },
-                          cells: state.observations[index].toMap().values.map(
+                          cells: state.audits[index].toMap().values.map(
                             (entry) {
                               if (entry is int) {
-                                if (entry < ObservationType.values.length) {
+                                if (entry < AuditStatus.values.length) {
                                   return DataCell(
-                                    ObservationTypeBadge(
-                                      type: entry == ObservationType.safe.index
-                                          ? 'Safe'
-                                          : 'Unsafe',
+                                    AuditStatusBadge(
+                                      type: entry,
                                     ),
                                   );
                                 } else {
                                   return DataCell(
                                     Text(
                                       (DateTime.fromMillisecondsSinceEpoch(
-                                              entry))
-                                          .toIso8601String(),
+                                        entry,
+                                      )).toIso8601String(),
                                     ),
                                   );
                                 }
+                              } else if (entry is double) {
+                                return DataCell(
+                                  LinearProgressIndicator(
+                                    backgroundColor: const Color(0xFFD9D9D9),
+                                    color: const Color(0xFFB3B3B3),
+                                    value: entry,
+                                    minHeight: 32,
+                                  ),
+                                );
                               } else {
                                 return DataCell(Text(entry as String));
                               }
@@ -235,20 +187,39 @@ class _ObservationScreenState extends State<ObservationScreen> {
   }
 }
 
-class ObservationTypeBadge extends StatelessWidget {
-  const ObservationTypeBadge({
+class AuditStatusBadge extends StatelessWidget {
+  const AuditStatusBadge({
     super.key,
     required this.type,
   });
-  final String type;
+  final int type;
 
   @override
   Widget build(BuildContext context) {
+    Color color = const Color(0xFFE4E4E4);
+    switch (AuditStatus.values[type]) {
+      case AuditStatus.draft:
+        color = const Color(0xFFE4E4E4);
+        break;
+      case AuditStatus.complete:
+        color = const Color(0xFFCEF8C6);
+        break;
+      case AuditStatus.review:
+        color = const Color(0xFFD1ECFF);
+        break;
+      case AuditStatus.rejected:
+        color = const Color(0xFFFFBABA);
+        break;
+      case AuditStatus.approved:
+        color = const Color(0xFFEAE2FC);
+        break;
+      case AuditStatus.achieved:
+        color = const Color(0xFFEDD1B7);
+        break;
+    }
     return Container(
       decoration: BoxDecoration(
-        color: type == 'Unsafe'
-            ? const Color(0xFFFFBABA)
-            : const Color(0xFFCEF8C6),
+        color: color,
         borderRadius: BorderRadius.circular(30),
       ),
       padding: const EdgeInsets.symmetric(
@@ -256,7 +227,7 @@ class ObservationTypeBadge extends StatelessWidget {
         vertical: 7,
       ),
       child: Text(
-        type,
+        capitalize(AuditStatus.values[type].name),
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -357,10 +328,10 @@ class MoreButton extends StatelessWidget {
 class FilterButton extends StatelessWidget {
   const FilterButton({
     Key? key,
-    required this.filterItems,
+    // required this.filterItems,
   }) : super(key: key);
 
-  final List<ObservationFilterItem> filterItems;
+  // final List<ObservationFilterItem> filterItems;
 
   @override
   Widget build(BuildContext context) {
@@ -390,25 +361,25 @@ class FilterButton extends StatelessWidget {
         const SizedBox(
           width: 10,
         ),
-        filterItems.isNotEmpty
-            ? Container(
-                width: 24,
-                height: 24,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF207BBD),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  filterItems.length.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
-            : Container()
+        // filterItems.isNotEmpty
+        //     ? Container(
+        //         width: 24,
+        //         height: 24,
+        //         alignment: Alignment.center,
+        //         decoration: BoxDecoration(
+        //           color: const Color(0xFF207BBD),
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: Text(
+        //           filterItems.length.toString(),
+        //           style: const TextStyle(
+        //             color: Colors.white,
+        //             fontSize: 16,
+        //             fontWeight: FontWeight.w700,
+        //           ),
+        //         ),
+        //       )
+        //     : Container()
       ]),
     );
   }
@@ -417,11 +388,11 @@ class FilterButton extends StatelessWidget {
 class SortButton extends StatelessWidget {
   const SortButton({
     Key? key,
-    required this.sortItems,
+    // required this.sortItems,
     required this.onClick,
   }) : super(key: key);
 
-  final List<ObservationSortItem> sortItems;
+  // final List<ObservationSortItem> sortItems;
   final Function onClick;
 
   @override
@@ -452,25 +423,25 @@ class SortButton extends StatelessWidget {
         const SizedBox(
           width: 10,
         ),
-        sortItems.isNotEmpty
-            ? Container(
-                width: 24,
-                height: 24,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF207BBD),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  sortItems.length.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              )
-            : Container()
+        // sortItems.isNotEmpty
+        //     ? Container(
+        //         width: 24,
+        //         height: 24,
+        //         alignment: Alignment.center,
+        //         decoration: BoxDecoration(
+        //           color: const Color(0xFF207BBD),
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: Text(
+        //           sortItems.length.toString(),
+        //           style: const TextStyle(
+        //             color: Colors.white,
+        //             fontSize: 16,
+        //             fontWeight: FontWeight.w700,
+        //           ),
+        //         ),
+        //       )
+        //     : Container()
       ]),
     );
   }

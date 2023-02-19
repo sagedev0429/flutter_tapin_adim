@@ -13,10 +13,10 @@ class ObservationsBloc extends Bloc<ObservationsEvent, ObservationsState> {
   ObservationsBloc({
     required this.observationRepository,
   }) : super(const ObservationsState()) {
-    on<ObservatioinSubscriptionEvent>(_onObservationSubscription);
+    on<ObservationsSubcriptionEvent>(_onObservationSubscription);
   }
 
-  Future<void> _onObservationSubscription(ObservatioinSubscriptionEvent event,
+  Future<void> _onObservationSubscription(ObservationsSubcriptionEvent event,
       Emitter<ObservationsState> emit) async {
     emit(state.copyWith(status: ObservationsStatus.loading));
     try {
