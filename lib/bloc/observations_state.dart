@@ -11,18 +11,18 @@ enum ObservationsStatus {
 class ObservationsState extends Equatable {
   final ObservationsStatus status;
   final List<Observation> observations;
-  final ObservationFilter filter;
-  final ObservationSort sort;
+  final Filter filter;
+  final Sort sort;
   const ObservationsState({
     this.status = ObservationsStatus.initial,
     this.observations = const [],
-    this.filter = const ObservationFilter(),
-    this.sort = const ObservationSort(),
+    this.filter = const Filter(),
+    this.sort = const Sort(),
   });
 
-  List<Observation> get filteredObservations => filter.applyAll(sortedObservations);
+  List<Model> get filteredObservations => filter.applyAll(sortedObservations);
 
-  List<Observation> get sortedObservations => sort.applyAll(observations);
+  List<Model> get sortedObservations => sort.applyAll(observations);
 
   @override
   List<Object> get props => [
@@ -34,8 +34,8 @@ class ObservationsState extends Equatable {
   ObservationsState copyWith({
     ObservationsStatus? status,
     List<Observation>? observations,
-    ObservationFilter? filter,
-    ObservationSort? sort,
+    Filter? filter,
+    Sort? sort,
   }) {
     return ObservationsState(
       status: status ?? this.status,

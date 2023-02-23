@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'model.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 enum AuditStatus { draft, complete, review, rejected, approved, achieved }
 
-class Audit {
+class Audit extends Model {
   final AuditStatus status;
   final String id;
   final String template;
@@ -23,9 +25,10 @@ class Audit {
     required this.progress,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'status': status.index,
+      'status': 'audit___${status.index}',
       'id': id,
       'template': template,
       'owner': owner,
@@ -38,7 +41,12 @@ class Audit {
 
   factory Audit.fromMap(Map<String, dynamic> map) {
     return Audit(
-      status: AuditStatus.values[map['status'] as int],
+      status: AuditStatus.values[int.parse(
+        (map['status'] as String).replaceAll(
+          'audit___',
+          '',
+        ),
+      )],
       id: map['id'] as String,
       template: map['template'] as String,
       owner: map['owner'] as String,
@@ -51,7 +59,8 @@ class Audit {
 
   String toJson() => json.encode(toMap());
 
-  factory Audit.fromJson(String source) => Audit.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Audit.fromJson(String source) =>
+      Audit.fromMap(json.decode(source) as Map<String, dynamic>);
 
   Audit copyWith({
     AuditStatus? status,

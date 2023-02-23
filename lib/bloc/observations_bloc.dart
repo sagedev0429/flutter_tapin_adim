@@ -1,6 +1,7 @@
+import 'package:admin/models/model.dart';
 import 'package:admin/models/observation.dart';
-import 'package:admin/models/observation_filter.dart';
-import 'package:admin/models/observation_sort.dart';
+import 'package:admin/models/filter.dart';
+import 'package:admin/models/sort.dart';
 import 'package:admin/repositories/observation_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';

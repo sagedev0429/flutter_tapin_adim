@@ -103,65 +103,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         )
-        // SizedBox(
-        //   height: 800,
-        //   child: CustomScrollView(
-        //     primary: false,
-        //     slivers: [
-        //       SliverGrid.count(
-        //         mainAxisSpacing: 40,
-        //         crossAxisCount: 2,
-        //         crossAxisSpacing: 40,
-        //         children: [
-        //           Container(
-        //             alignment: Alignment.center,
-        //             padding: const EdgeInsets.all(8),
-        //             color: const Color(0xFFE3E2E1),
-        //             child: const Text(
-        //               "Data viz graphic",
-        //               style: TextStyle(
-        //                 fontSize: 24,
-        //               ),
-        //             ),
-        //           ),
-        //           Container(
-        //             alignment: Alignment.center,
-        //             padding: const EdgeInsets.all(8),
-        //             color: const Color(0xFFE3E2E1),
-        //             child: const Text(
-        //               "Data viz graphic",
-        //               style: TextStyle(
-        //                 fontSize: 24,
-        //               ),
-        //             ),
-        //           ),
-        //           Container(
-        //             alignment: Alignment.center,
-        //             padding: const EdgeInsets.all(8),
-        //             color: const Color(0xFFE3E2E1),
-        //             child: const Text(
-        //               "To Do",
-        //               style: TextStyle(
-        //                 fontSize: 24,
-        //               ),
-        //             ),
-        //           ),
-        //           Container(
-        //             alignment: Alignment.center,
-        //             padding: const EdgeInsets.all(8),
-        //             color: const Color(0xFFE3E2E1),
-        //             child: const Text(
-        //               "Activity Feed",
-        //               style: TextStyle(
-        //                 fontSize: 24,
-        //               ),
-        //             ),
-        //           )
-        //         ],
-        //       )
-        //     ],
-        //   ),
-        // )
       ],
     );
   }

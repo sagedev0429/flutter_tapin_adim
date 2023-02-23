@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'model.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 enum ObservationType { safe, unsafe }
 
-class Observation {
+class Observation extends Model {
   final String description;
   final ObservationType type;
   final String project;
@@ -20,10 +22,11 @@ class Observation {
     required this.date,
   });
 
+  @override
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'description': description,
-      'type': type.index,
+      'type': 'observation___${type.index}',
       'project': project,
       'company': company,
       'name': name,
@@ -34,7 +37,12 @@ class Observation {
   factory Observation.fromMap(Map<String, dynamic> map) {
     return Observation(
       description: map['description'] as String,
-      type: ObservationType.values[map['type'] as int],
+      type: ObservationType.values[int.parse(
+        (map['type'] as String).replaceAll(
+          'observation___',
+          '',
+        ),
+      )],
       project: map['project'] as String,
       company: map['company'] as String,
       name: map['name'] as String,

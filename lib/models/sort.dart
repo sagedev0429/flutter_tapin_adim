@@ -1,30 +1,30 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'observation.dart';
+import 'model.dart';
 
-class ObservationSortItem {
+class SortItem {
   final String name;
   final bool direction;
-  const ObservationSortItem({
+  const SortItem({
     required this.name,
     required this.direction,
   });
 }
 
-class ObservationSort {
-  final List<ObservationSortItem> sortItems;
+class Sort {
+  final List<SortItem> sortItems;
 
-  const ObservationSort({
+  const Sort({
     this.sortItems = const [],
   });
 
-  List<Observation> applyAll(List<Observation> observations) {
-    List<Observation> sortedObservations = [...observations];
-    if (sortedObservations.length > 1) {
-      sortedObservations.sort((first, second) {
+  List<Model> applyAll(List<Model> lists) {
+    List<Model> sortedLists = [...lists];
+    if (sortedLists.length > 1) {
+      sortedLists.sort((first, second) {
         final firstMap = first.toMap();
         final secondMap = second.toMap();
         int result;
-        for (var i = 0; i < observations.length; i++) {
+        for (var i = 0; i < lists.length; i++) {
           result = compare(i, firstMap, secondMap);
           if (result != 0) break;
         }
@@ -32,7 +32,7 @@ class ObservationSort {
       });
     }
 
-    return sortedObservations;
+    return sortedLists;
   }
 
   int compare(int i, dynamic first, dynamic second) {
