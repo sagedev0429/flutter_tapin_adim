@@ -30,34 +30,3 @@ class _ObservationScreenState extends State<ObservationScreen> {
     );
   }
 }
-
-class ObservationTypeBadge extends StatelessWidget {
-  const ObservationTypeBadge({
-    super.key,
-    required this.type,
-  });
-  final String type;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: type == 'Unsafe'
-            ? const Color(0xFFFFBABA)
-            : const Color(0xFFCEF8C6),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 19,
-        vertical: 7,
-      ),
-      child: Text(
-        type,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-}

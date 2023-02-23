@@ -31,11 +31,15 @@ environment:
 dependencies:
   bloc: ^8.1.1
   cupertino_icons: ^1.0.2
+  custom_pop_up_menu: ^1.2.4
   dropdown_button2: ^1.9.2
   equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
+  modal_side_sheet: ^0.0.1
+  popover: ^0.2.8+1
+  quds_popup_menu: ^0.0.1+1
   strings: ^0.2.2
 
 dev_dependencies:
