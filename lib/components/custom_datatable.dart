@@ -80,10 +80,11 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
 
   void _showModal() {
     showModalSideSheet(
-      width: MediaQuery.of(context).size.width * 2 / 3,
+      width: MediaQuery.of(context).size.width * 1 / 3,
       barrierDismissible: true,
       context: context,
       ignoreAppBar: false,
+      transitionDuration: const Duration(milliseconds: 100),
       body: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 200,
@@ -144,7 +145,8 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
                   rows: List.generate(
                     widget.models.length,
                     (i) {
-                      Map<String, dynamic> map = widget.models[i].visibleItemsToMap();
+                      Map<String, dynamic> map =
+                          widget.models[i].visibleItemsToMap();
                       return DataRow(
                         onSelectChanged: (value) => _showModal(),
                         cells: [
