@@ -23,6 +23,18 @@ class Observation extends Model {
   });
 
   @override
+  Map<String, dynamic> visibleItemsToMap() {
+    return <String, dynamic>{
+      'description': description,
+      'type': 'observation___${type.index}',
+      'project': project,
+      'company': company,
+      'name': name,
+      'date': date.millisecondsSinceEpoch,
+    };
+  }
+
+  
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'description': description,

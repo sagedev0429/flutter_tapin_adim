@@ -119,36 +119,48 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
                   ),
                   showCheckboxColumn: true,
                   dividerThickness: 2,
-                  columns: widget.models[0]
-                      .toMap()
-                      .keys
-                      .map(
-                        (key) => DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              capitalize(key),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
+                  columns: [
+                    ...widget.models[0]
+                        .visibleItemsToMap()
+                        .keys
+                        .map(
+                          (key) => DataColumn(
+                            label: Expanded(
+                              child: Text(
+                                capitalize(key),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                    const DataColumn(
+                      label: Text(''),
+                    ),
+                  ],
                   rows: List.generate(
                     widget.models.length,
                     (i) {
-                      Map<String, dynamic> map = widget.models[i].toMap();
+                      Map<String, dynamic> map = widget.models[i].visibleItemsToMap();
                       return DataRow(
                         onSelectChanged: (value) => _showModal(),
-                        cells: map.values.map(
-                          (entry) {
-                            return DataCell(
-                              _buildCell(entry),
-                            );
-                          },
-                        ).toList(),
+                        cells: [
+                          ...map.values.map(
+                            (entry) {
+                              return DataCell(
+                                _buildCell(entry),
+                              );
+                            },
+                          ).toList(),
+                          const DataCell(
+                            Icon(
+                              Icons.keyboard_double_arrow_right,
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),

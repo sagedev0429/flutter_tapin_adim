@@ -26,6 +26,19 @@ class Audit extends Model {
   });
 
   @override
+  Map<String, dynamic> visibleItemsToMap() {
+    return <String, dynamic>{
+      'status': 'audit___${status.index}',
+      'id': id,
+      'template': template,
+      'owner': owner,
+      'site': site,
+      'project': project,
+      'created': created.millisecondsSinceEpoch,
+      'progress': progress,
+    };
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'status': 'audit___${status.index}',

@@ -1,20 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'audits_bloc.dart';
 
-enum AuditsStatus {
-  initial,
-  loading,
-  succuess,
-  failure,
-}
-
 class AuditsState extends Equatable {
   final List<Audit> audits;
-  final AuditsStatus status;
+  final ModelStatus status;
 
   const AuditsState({
     this.audits = const [],
-    this.status = AuditsStatus.initial,
+    this.status = ModelStatus.initial,
   });
 
   @override
@@ -25,7 +18,7 @@ class AuditsState extends Equatable {
 
   AuditsState copyWith({
     List<Audit>? audits,
-    AuditsStatus? status,
+    ModelStatus? status,
   }) {
     return AuditsState(
       audits: audits ?? this.audits,

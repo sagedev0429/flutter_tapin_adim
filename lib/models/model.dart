@@ -1,3 +1,10 @@
 abstract class Model {
-  Map<String, dynamic> toMap();
+  Map<String, dynamic> visibleItemsToMap();
+}
+
+enum ModelStatus {
+  initial,
+  loading,
+  succuess,
+  failure,
 }

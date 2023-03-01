@@ -1,6 +1,8 @@
 import 'package:admin/bloc/audits_bloc.dart';
+import 'package:admin/bloc/users_bloc.dart';
 import 'package:admin/repositories/audit_repository.dart';
 import 'package:admin/repositories/observation_repository.dart';
+import 'package:admin/repositories/user_repository.dart';
 import 'package:admin/screens/dashboard.dart';
 import 'package:admin/screens/layout.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,9 @@ class MyApp extends StatelessWidget {
           ),
           RepositoryProvider(
             create: (context) => AuditRepository(),
+          ),
+          RepositoryProvider(
+            create: (context) => UserRepository(),
           )
         ],
         child: MultiBlocProvider(
@@ -46,7 +51,12 @@ class MyApp extends StatelessWidget {
               )..add(
                   AuditsSubscriptionEvent(),
                 ),
-            )
+            ),
+            BlocProvider(
+              create: (context) => UsersBloc(
+                userRepository: RepositoryProvider.of<UserRepository>(context),
+              )..add(UsersSubcriptionEvent()),
+            ),
           ],
           child: const Layout(),
         ),

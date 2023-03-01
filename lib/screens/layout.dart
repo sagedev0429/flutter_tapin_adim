@@ -1,8 +1,4 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-
-import 'package:admin/screens/dashboard.dart';
-import 'package:admin/screens/observation.dart';
 
 import 'screens.dart';
 
@@ -63,71 +59,11 @@ class _LayoutState extends State<Layout> {
                       ),
                     ),
                   ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.dashboard,
+                  ...screens.map(
+                    (screen) => NavigationRailDestination(
+                      icon: screen.icon,
+                      label: screen.label,
                     ),
-                    label: Text('Dashboard'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.edit_note_outlined,
-                    ),
-                    label: Text('Observation'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.lock_clock,
-                    ),
-                    label: Text('Work hours'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.warning,
-                    ),
-                    label: Text('Incidents'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.check_outlined,
-                    ),
-                    label: Text('Action Items'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.format_paint,
-                    ),
-                    label: Text('Audits'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.document_scanner,
-                    ),
-                    label: Text('Documentation'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.hail_outlined,
-                    ),
-                    label: Text('Training & Certs'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.perm_identity,
-                    ),
-                    label: Text('Permit Tracker'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.bar_chart,
-                    ),
-                    label: Text('Reports'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(
-                      Icons.settings,
-                    ),
-                    label: Text('Administration'),
                   ),
                 ],
                 selectedIndex: _selectedIndex,
@@ -135,9 +71,15 @@ class _LayoutState extends State<Layout> {
               Positioned(
                 left: backButtonLeftPadding,
                 top: 60,
-                child: GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
+                child: InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF14130F),
+                      borderRadius: BorderRadius.circular(
+                        12,
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(12),
                     child: Image.asset('images/$backButtonType.png'),
                   ),
                   onTap: () {
@@ -165,99 +107,7 @@ class _LayoutState extends State<Layout> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          // DropdownButtonHideUnderline(
-                          //   child: DropdownButton2(
-                          //     buttonDecoration: BoxDecoration(
-                          //       color: const Color(0xFF2B2A25),
-                          //       borderRadius: BorderRadius.circular(8),
-                          //     ),
-                          //     hint: Text(
-                          //       'Select Item',
-                          //       style: TextStyle(
-                          //         fontSize: 14,
-                          //         color: Theme.of(context).hintColor,
-                          //       ),
-                          //     ),
-                          //     value: Row(
-                          //       children: const [
-                          //         Icon(
-                          //           Icons.location_pin,
-                          //           color: Color(0xFFA3A2A1),
-                          //         ),
-                          //         SizedBox(
-                          //           width: 9,
-                          //         ),
-                          //         Text(
-                          //           'South East',
-                          //           style: TextStyle(
-                          //             fontSize: 16,
-                          //             color: Colors.white,
-                          //             fontWeight: FontWeight.w700,
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //     icon: const Icon(
-                          //       Icons.keyboard_arrow_down,
-                          //       color: Color(0xFFA3A2A1),
-                          //     ),
-                          //     items: [
-                          //       DropdownMenuItem(
-                          //         value: Row(
-                          //           children: const [
-                          //             Icon(
-                          //               Icons.location_pin,
-                          //               color: Color(0xFFA3A2A1),
-                          //             ),
-                          //             SizedBox(
-                          //               width: 9,
-                          //             ),
-                          //             Text(
-                          //               'South East',
-                          //               style: TextStyle(
-                          //                 fontSize: 16,
-                          //                 color: Colors.white,
-                          //                 fontWeight: FontWeight.w700,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //         enabled: true,
-                          //         child: Row(
-                          //           children: const [
-                          //             Icon(
-                          //               Icons.location_pin,
-                          //               color: Color(0xFFA3A2A1),
-                          //             ),
-                          //             SizedBox(
-                          //               width: 9,
-                          //             ),
-                          //             Text(
-                          //               'South East',
-                          //               style: TextStyle(
-                          //                 fontSize: 16,
-                          //                 color: Colors.white,
-                          //                 fontWeight: FontWeight.w700,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         ),
-                          //       ),
-                          //     ],
-                          //     onChanged: (value) {
-                          //       setState(() {
-                          //         selectedLocation = value as String;
-                          //       });
-                          //     },
-                          //     buttonHeight: 36,
-                          //     buttonWidth: 161,
-                          //     itemHeight: 36,
-                          //   ),
-                          // ),
-                        ],
-                      ),
+                      Row(),
                       Row(
                         children: [
                           const Icon(
@@ -297,7 +147,7 @@ class _LayoutState extends State<Layout> {
                     vertical: 28,
                     horizontal: 36,
                   ),
-                  child: screens[_selectedIndex - 1],
+                  child: screens[_selectedIndex - 1].widget,
                 ),
               ],
             ),

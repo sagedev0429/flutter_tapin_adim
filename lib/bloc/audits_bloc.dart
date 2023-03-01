@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/audit.dart';
+import '../models/model.dart';
 
 part 'audits_event.dart';
 part 'audits_state.dart';
@@ -18,7 +19,7 @@ class AuditsBloc extends Bloc<AuditsEvent, AuditsState> {
   Future<void> _onAuditSubscription(
       AuditsSubscriptionEvent event, Emitter<AuditsState> emit) async {
     emit(
-      state.copyWith(status: AuditsStatus.loading),
+      state.copyWith(status: ModelStatus.loading),
     );
     try {
       final audits = await auditRepository.getAudits();
@@ -26,11 +27,11 @@ class AuditsBloc extends Bloc<AuditsEvent, AuditsState> {
         state.copyWith(audits: audits),
       );
       emit(
-        state.copyWith(status: AuditsStatus.succuess),
+        state.copyWith(status: ModelStatus.succuess),
       );
     } catch (e) {
       emit(
-        state.copyWith(status: AuditsStatus.failure),
+        state.copyWith(status: ModelStatus.failure),
       );
     }
   }

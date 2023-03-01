@@ -1,20 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'observations_bloc.dart';
 
-enum ObservationsStatus {
-  initial,
-  loading,
-  succuess,
-  failure,
-}
+
 
 class ObservationsState extends Equatable {
-  final ObservationsStatus status;
+  final ModelStatus status;
   final List<Observation> observations;
   final Filter filter;
   final Sort sort;
   const ObservationsState({
-    this.status = ObservationsStatus.initial,
+    this.status = ModelStatus.initial,
     this.observations = const [],
     this.filter = const Filter(),
     this.sort = const Sort(),
@@ -32,7 +27,7 @@ class ObservationsState extends Equatable {
       ];
 
   ObservationsState copyWith({
-    ObservationsStatus? status,
+    ModelStatus? status,
     List<Observation>? observations,
     Filter? filter,
     Sort? sort,

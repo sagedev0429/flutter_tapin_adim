@@ -19,13 +19,13 @@ class ObservationsBloc extends Bloc<ObservationsEvent, ObservationsState> {
 
   Future<void> _onObservationSubscription(ObservationsSubcriptionEvent event,
       Emitter<ObservationsState> emit) async {
-    emit(state.copyWith(status: ObservationsStatus.loading));
+    emit(state.copyWith(status: ModelStatus.loading));
     try {
       final observations = await observationRepository.getObservations();
       emit(state.copyWith(observations: observations));
-      emit(state.copyWith(status: ObservationsStatus.succuess));
+      emit(state.copyWith(status: ModelStatus.succuess));
     } catch (e) {
-      emit(state.copyWith(status: ObservationsStatus.failure));
+      emit(state.copyWith(status: ModelStatus.failure));
     }
   }
 }

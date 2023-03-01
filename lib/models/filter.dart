@@ -15,7 +15,7 @@ class FilterItem {
   });
 
   bool apply(Model model) {
-    final modelMap = model.toMap();
+    final modelMap = model.visibleItemsToMap();
     switch (comparer) {
       case Comparer.isEqual:
         return modelMap[left] == right;

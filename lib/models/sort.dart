@@ -21,8 +21,8 @@ class Sort {
     List<Model> sortedLists = [...lists];
     if (sortedLists.length > 1) {
       sortedLists.sort((first, second) {
-        final firstMap = first.toMap();
-        final secondMap = second.toMap();
+        final firstMap = first.visibleItemsToMap();
+        final secondMap = second.visibleItemsToMap();
         int result;
         for (var i = 0; i < lists.length; i++) {
           result = compare(i, firstMap, secondMap);
