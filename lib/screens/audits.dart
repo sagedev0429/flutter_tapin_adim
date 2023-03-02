@@ -13,6 +13,11 @@ class AuditsScreen extends StatefulWidget {
 
 class _AuditsScreenState extends State<AuditsScreen> {
   List<bool> selected = [];
+
+  Widget _modalContainer(Map<String, dynamic> map) {
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuditsBloc, AuditsState>(
@@ -26,6 +31,7 @@ class _AuditsScreenState extends State<AuditsScreen> {
         return CustomDataTableScreen(
           title: 'Audits',
           models: state.audits,
+          modalContainer: _modalContainer,
         );
       },
     );

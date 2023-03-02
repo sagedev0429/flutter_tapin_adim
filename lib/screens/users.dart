@@ -17,6 +17,50 @@ class _UsersScreenState extends State<UsersScreen> {
     super.initState();
   }
 
+  Widget _modalContainer(Map<String, dynamic> map) {
+    final keys = map.keys.toList();
+
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: 30,
+        horizontal: 100,
+      ),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            child: const Text(
+              'User Details',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 150,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: keys.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(keys[index]),
+                    Text(
+                      map[keys[index]],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UsersBloc, UsersState>(
@@ -25,6 +69,7 @@ class _UsersScreenState extends State<UsersScreen> {
         return CustomDataTableScreen(
           title: 'Users',
           models: state.users,
+          modalContainer: _modalContainer,
         );
       },
     );

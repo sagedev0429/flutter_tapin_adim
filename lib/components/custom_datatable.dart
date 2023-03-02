@@ -11,8 +11,13 @@ import 'observation_type_badge.dart';
 class CustomDataTableScreen extends StatefulWidget {
   final String title;
   final List<Model> models;
-  const CustomDataTableScreen(
-      {super.key, required this.title, required this.models});
+  final Widget Function(Map<String, dynamic>) modalContainer;
+  const CustomDataTableScreen({
+    super.key,
+    required this.title,
+    required this.models,
+    required this.modalContainer,
+  });
 
   @override
   State<CustomDataTableScreen> createState() => _CustomDataTableScreenState();
@@ -28,20 +33,14 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
     super.initState();
   }
 
-  void _showModal() {
+  void _showModal(Map<String, dynamic> map) {
     showModalSideSheet(
       width: MediaQuery.of(context).size.width * 1 / 3,
       barrierDismissible: true,
       context: context,
       ignoreAppBar: false,
       transitionDuration: const Duration(milliseconds: 200),
-      body: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 200,
-          horizontal: 100,
-        ),
-        child: Container(),
-      ),
+      body: widget.modalContainer(map),
     );
   }
 
@@ -60,37 +59,45 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
         widget.models.isNotEmpty
             ? SizedBox(
                 width: double.infinity,
-                child: PaginatedDataTable(
-                  showCheckboxColumn: true,
-                  rowsPerPage: rowsPerPage,
-                  onRowsPerPageChanged: (value) => setState(() {
-                    rowsPerPage = value!;
-                  }),
-                  columns: [
-                    ...widget.models[0]
-                        .visibleItemsToMap()
-                        .keys
-                        .map(
-                          (key) => DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                capitalize(key),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
+                child: Expanded(
+                  
+                  child: SingleChildScrollView(
+                    child: PaginatedDataTable(
+                      headingRowHeight: 80,
+                      dataRowHeight: 60,
+                      showCheckboxColumn: true,
+                      // rowsPerPage: rowsPerPage,
+                      // onRowsPerPageChanged: (value) => setState(() {
+                      //   rowsPerPage = value!;
+                      // }),
+                      showFirstLastButtons: true,
+                      columns: [
+                        ...widget.models[0]
+                            .visibleItemsToMap()
+                            .keys
+                            .map(
+                              (key) => DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    capitalize(key),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    const DataColumn(
-                      label: Text(''),
+                            )
+                            .toList(),
+                        const DataColumn(
+                          label: Text(''),
+                        ),
+                      ],
+                      source: RowData(
+                        models: widget.models,
+                        showModal: _showModal,
+                      ),
                     ),
-                  ],
-                  source: RowData(
-                    models: widget.models,
-                    showModal: _showModal,
                   ),
                 ),
               )
@@ -102,7 +109,7 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
 
 class RowData extends DataTableSource {
   final List<Model> models;
-  final VoidCallback showModal;
+  final Function(Map<String, dynamic>) showModal;
 
   RowData({
     required this.models,
@@ -175,7 +182,7 @@ class RowData extends DataTableSource {
           (entry) {
             return DataCell(
               _buildCell(entry),
-              onTap: () => showModal(),
+              onTap: () => showModal(map),
             );
           },
         ).toList(),
@@ -183,7 +190,7 @@ class RowData extends DataTableSource {
           const Icon(
             Icons.keyboard_double_arrow_right,
           ),
-          onTap: () => showModal(),
+          onTap: () => showModal(map),
         ),
       ],
     );
