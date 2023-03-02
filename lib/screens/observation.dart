@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/observations_bloc.dart';
+import '../bloc/blocs.dart';
 import '../components/custom_datatable.dart';
 
 class ObservationScreen extends StatefulWidget {

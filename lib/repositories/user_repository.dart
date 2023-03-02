@@ -3,7 +3,7 @@ import '../models/user.dart';
 class UserRepository {
   Future<List<User>> getUsers() async {
     await Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 300),
     );
     return List<User>.generate(
       100,

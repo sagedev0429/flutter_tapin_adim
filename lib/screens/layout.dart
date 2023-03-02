@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../bloc/theme/bloc/theme_bloc.dart';
+import '../bloc/theme/theme_bloc.dart';
 import 'screens.dart';
 
 class Layout extends StatefulWidget {
@@ -11,9 +10,7 @@ class Layout extends StatefulWidget {
   State<Layout> createState() => _LayoutState();
 }
 
-class _LayoutState extends State<Layout> {
-  // String backButtonType = 'back';
-  // double backButtonLeftPadding = 30;
+class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
   String selectedLocation = 'South East';
 
   @override
@@ -26,6 +23,7 @@ class _LayoutState extends State<Layout> {
               Stack(
                 children: [
                   NavigationRail(
+                    useIndicator: true,
                     onDestinationSelected: (int index) {
                       if (index == 0) {
                         context
@@ -78,7 +76,7 @@ class _LayoutState extends State<Layout> {
                     child: InkWell(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF14130F),
+                          color: Colors.transparent,
                           borderRadius: BorderRadius.circular(
                             12,
                           ),
@@ -88,10 +86,16 @@ class _LayoutState extends State<Layout> {
                             'images/${state.isMenuExtended ? 'back' : 'forward'}.png'),
                       ),
                       onTap: () {
-                        context.read<ThemeBloc>().add(
-                              ThemeMenuCollpased(
-                                  isMenuExtended: !state.isMenuExtended),
-                            );
+                        Future.delayed(
+                          const Duration(
+                            microseconds: 5000,
+                          ),
+                          () => context.read<ThemeBloc>().add(
+                                ThemeMenuCollpased(
+                                  isMenuExtended: !state.isMenuExtended,
+                                ),
+                              ),
+                        );
                       },
                     ),
                   ),

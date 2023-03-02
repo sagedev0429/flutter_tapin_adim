@@ -60,7 +60,6 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
             ? SizedBox(
                 width: double.infinity,
                 child: Expanded(
-                  
                   child: SingleChildScrollView(
                     child: PaginatedDataTable(
                       headingRowHeight: 80,

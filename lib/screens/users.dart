@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/users_bloc.dart';
+import '../bloc/blocs.dart';
 import '../components/custom_datatable.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _UsersScreenState extends State<UsersScreen> {
     final keys = map.keys.toList();
 
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 30,
         horizontal: 100,
       ),
@@ -37,7 +37,7 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 150,
           ),
           Expanded(

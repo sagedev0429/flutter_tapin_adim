@@ -1,16 +1,10 @@
-import 'package:admin/bloc/audits_bloc.dart';
-import 'package:admin/bloc/theme/bloc/theme_bloc.dart';
-import 'package:admin/bloc/users_bloc.dart';
-import 'package:admin/repositories/audit_repository.dart';
-import 'package:admin/repositories/observation_repository.dart';
-import 'package:admin/repositories/user_repository.dart';
+import 'bloc/blocs.dart';
+import 'repositories/repositories.dart';
+import 'screens/layout.dart';
 
-import 'package:admin/screens/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-
-import 'bloc/observations_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
