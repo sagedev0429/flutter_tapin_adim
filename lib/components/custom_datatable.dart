@@ -11,8 +11,13 @@ import 'observation_type_badge.dart';
 class CustomDataTableScreen extends StatefulWidget {
   final String title;
   final List<Model> models;
-  const CustomDataTableScreen(
-      {super.key, required this.title, required this.models});
+  final Widget Function(Map<String, dynamic>) modalContainer;
+  const CustomDataTableScreen({
+    super.key,
+    required this.title,
+    required this.models,
+    required this.modalContainer,
+  });
 
   @override
   State<CustomDataTableScreen> createState() => _CustomDataTableScreenState();
@@ -21,11 +26,94 @@ class CustomDataTableScreen extends StatefulWidget {
 class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
   List<SortItem> sortItems = [];
   List<FilterItem> filterItems = [];
+  int rowsPerPage = 10;
 
   @override
   void initState() {
     super.initState();
   }
+
+  void _showModal(Map<String, dynamic> map) {
+    showModalSideSheet(
+      width: MediaQuery.of(context).size.width * 1 / 3,
+      barrierDismissible: true,
+      context: context,
+      ignoreAppBar: false,
+      transitionDuration: const Duration(milliseconds: 200),
+      body: widget.modalContainer(map),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Header(
+          widget: widget,
+          sortItems: sortItems,
+          filterItems: filterItems,
+        ),
+        const SizedBox(
+          height: 23,
+        ),
+        widget.models.isNotEmpty
+            ? SizedBox(
+                width: double.infinity,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    child: PaginatedDataTable(
+                      headingRowHeight: 80,
+                      dataRowHeight: 60,
+                      showCheckboxColumn: true,
+                      // rowsPerPage: rowsPerPage,
+                      // onRowsPerPageChanged: (value) => setState(() {
+                      //   rowsPerPage = value!;
+                      // }),
+                      showFirstLastButtons: true,
+                      columns: [
+                        ...widget.models[0]
+                            .visibleItemsToMap()
+                            .keys
+                            .map(
+                              (key) => DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    capitalize(key),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        const DataColumn(
+                          label: Text(''),
+                        ),
+                      ],
+                      source: RowData(
+                        models: widget.models,
+                        showModal: _showModal,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : const CircularProgressIndicator(),
+      ],
+    );
+  }
+}
+
+class RowData extends DataTableSource {
+  final List<Model> models;
+  final Function(Map<String, dynamic>) showModal;
+
+  RowData({
+    required this.models,
+    required this.showModal,
+  });
 
   Widget _buildCell(dynamic entry) {
     if (entry is int) {
@@ -78,97 +166,31 @@ class _CustomDataTableScreenState extends State<CustomDataTableScreen> {
     }
   }
 
-  void _showModal() {
-    showModalSideSheet(
-      width: MediaQuery.of(context).size.width * 1 / 3,
-      barrierDismissible: true,
-      context: context,
-      ignoreAppBar: false,
-      transitionDuration: const Duration(milliseconds: 100),
-      body: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 200,
-          horizontal: 100,
-        ),
-        child: Container(),
-      ),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Header(
-          widget: widget,
-          sortItems: sortItems,
-          filterItems: filterItems,
+  bool get isRowCountApproximate => false;
+  @override
+  int get rowCount => models.length;
+  @override
+  int get selectedRowCount => 0;
+  @override
+  DataRow getRow(int index) {
+    Map<String, dynamic> map = models[index].visibleItemsToMap();
+    return DataRow(
+      cells: [
+        ...map.values.map(
+          (entry) {
+            return DataCell(
+              _buildCell(entry),
+              onTap: () => showModal(map),
+            );
+          },
+        ).toList(),
+        DataCell(
+          const Icon(
+            Icons.keyboard_double_arrow_right,
+          ),
+          onTap: () => showModal(map),
         ),
-        const SizedBox(
-          height: 23,
-        ),
-        widget.models.isNotEmpty
-            ? SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  showCheckboxColumn: true,
-                  dividerThickness: 2,
-                  columns: [
-                    ...widget.models[0]
-                        .visibleItemsToMap()
-                        .keys
-                        .map(
-                          (key) => DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                capitalize(key),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    const DataColumn(
-                      label: Text(''),
-                    ),
-                  ],
-                  rows: List.generate(
-                    widget.models.length,
-                    (i) {
-                      Map<String, dynamic> map =
-                          widget.models[i].visibleItemsToMap();
-                      return DataRow(
-                        onSelectChanged: (value) => _showModal(),
-                        cells: [
-                          ...map.values.map(
-                            (entry) {
-                              return DataCell(
-                                _buildCell(entry),
-                              );
-                            },
-                          ).toList(),
-                          const DataCell(
-                            Icon(
-                              Icons.keyboard_double_arrow_right,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              )
-            : const CircularProgressIndicator(),
       ],
     );
   }

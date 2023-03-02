@@ -1,4 +1,4 @@
-import 'package:admin/bloc/audits_bloc.dart';
+import '../bloc/audits/audits_bloc.dart';
 
 import '../models/audit.dart';
 

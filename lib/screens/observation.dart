@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/observations_bloc.dart';
+import '../bloc/blocs.dart';
 import '../components/custom_datatable.dart';
 
 class ObservationScreen extends StatefulWidget {
@@ -17,6 +17,10 @@ class _ObservationScreenState extends State<ObservationScreen> {
     super.initState();
   }
 
+  Widget _modalContainer(Map<String, dynamic> map) {
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ObservationsBloc, ObservationsState>(
@@ -25,6 +29,7 @@ class _ObservationScreenState extends State<ObservationScreen> {
         return CustomDataTableScreen(
           title: 'Observations',
           models: state.observations,
+          modalContainer: _modalContainer,
         );
       },
     );

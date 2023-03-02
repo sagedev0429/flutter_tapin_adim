@@ -1,5 +1,3 @@
-import 'package:admin/bloc/observations_bloc.dart';
-
 import '../models/observation.dart';
 
 class ObservationRepository {
@@ -7,6 +5,16 @@ class ObservationRepository {
     await Future.delayed(
       const Duration(seconds: 1),
     );
-    return initialObservations;
+    return List.generate(
+      100,
+      (index) => Observation(
+        company: 'Company$index',
+        date: DateTime(2000),
+        name: 'name$index',
+        description: 'description$index',
+        project: 'project$index',
+        type: index % 3 == 0 ? ObservationType.safe : ObservationType.unsafe,
+      ),
+    );
   }
 }
